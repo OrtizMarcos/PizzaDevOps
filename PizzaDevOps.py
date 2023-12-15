@@ -1,4 +1,5 @@
 import random
+import pandas as pd
 
 # Diccionario con el menú de pizzas y sus precios base
 menu_pizzas = {
@@ -71,7 +72,10 @@ def main():
     print("Bienvenido a la pizzería, desea realizar un pedido de pickup (recoger del local) o delivery (entrega a domicilio)?")
 
     pedidos = []  # Lista para almacenar los pedidos
-
+    #DataFrame para almacenar los detalles de las pizzas
+    columnas = ["Pizza", "Tamaño", "Precio"]
+    columnas = ["Pizza", "Tamaño", "Precio"]
+    detalles_df = pd.DataFrame(columns=columnas)
     # Definir método de entrega
     tipo_pedido = input("¿Quiere Pickup o Delivery? ").lower()
     mensaje_pedido = ""
