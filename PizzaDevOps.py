@@ -1,6 +1,5 @@
 import random
 import pandas as pd
-
 # Diccionario con el menú de pizzas y sus precios base
 menu_pizzas = {
     "margarita": {"mediano": 35000.0, "grande": 40000.0},
@@ -101,7 +100,6 @@ def main():
         otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
         if otro_pedido != 'si':
             break
-
     if tipo_pedido == "delivery":
         resultado = calcular_precio_total_con_delivery(pedidos, direccion)
         if resultado is not None:
