@@ -92,14 +92,19 @@ def main():
         pizza_size = input("Tamaño de pizza que desea (mediano, grande): ")
 
         # Validar pizza y tamaño antes de agregar al pedido
-        if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
-            pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
-        else:
-            print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
+    if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
+        precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
+        pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
 
-        otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
-        if otro_pedido != 'si':
-            break
+        # Agregar detalles al DataFrame
+        detalles_df = detalles_df.append({"Pizza": pizza_type.capitalize(), "Tamaño": pizza_size.capitalize(), "Precio": precio}, ignore_index=True)
+    else:
+        print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
+        continue  # Utiliza continue en lugar de break para continuar con la siguiente iteración
+    otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
+    if otro_pedido != 'si':
+        break
+
     if tipo_pedido == "delivery":
         resultado = calcular_precio_total_con_delivery(pedidos, direccion)
         if resultado is not None:
