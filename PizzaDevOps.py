@@ -92,18 +92,18 @@ def main():
         pizza_size = input("Tamaño de pizza que desea (mediano, grande): ")
 
         # Validar pizza y tamaño antes de agregar al pedido
-    if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
-        precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
-        pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
+        if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
+            precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
+            pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
 
-        # Agregar detalles al DataFrame
-        detalles_df = detalles_df.append({"Pizza": pizza_type.capitalize(), "Tamaño": pizza_size.capitalize(), "Precio": precio}, ignore_index=True)
-    else:
-        print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
-        continue  # Utiliza continue en lugar de break para continuar con la siguiente iteración
-    otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
-    if otro_pedido != 'si':
-        break
+            # Agregar detalles al DataFrame
+            detalles_df = detalles_df.append({"Pizza": pizza_type.capitalize(), "Tamaño": pizza_size.capitalize(), "Precio": precio}, ignore_index=True)
+        else:
+            print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
+            continue  # Utiliza continue en lugar de break para continuar con la siguiente iteración
+        otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
+        if otro_pedido != 'si':
+            break
 
     if tipo_pedido == "delivery":
         resultado = calcular_precio_total_con_delivery(pedidos, direccion)
@@ -119,15 +119,11 @@ def main():
         mensaje_pedido = f"Su pedido ha sido registrado con éxito, su número de pedido es {numero_pedido}, puede pasar a retirarlo al local en 20 minutos."
 
     # Imprimir resumen del pedido en caso de que se haya realizado alguno:
-    if len(pedidos) == 0:
-        print("No se realizaron pedidos.")
-    else:
+    if len(pedidos) > 0:
         print("\n|--------------------------------|\n")
-        print(mensaje_pedido)
-        print("Resumen del pedido:")
-        for pizza_type, pizza_size in pedidos:
-            mostrar_detalles_pizza(pizza_type, pizza_size)
-        print(f"Total a pagar: Gs. {total:.2f}")
+        print("n\Resumen del pedido:")
+        print(detalles_df)
+        print(f"\nTotal a pagar Gs. {total:.2f}")
         print("\n|--------------------------------|")
 
 if __name__ == "__main__":
