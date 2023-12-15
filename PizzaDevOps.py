@@ -97,7 +97,8 @@ def main():
             pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
 
             # Agregar detalles al DataFrame
-            detalles_df = detalles_df.append({"Pizza": pizza_type.capitalize(), "Tamaño": pizza_size.capitalize(), "Precio": precio}, ignore_index=True)
+            nueva_fila = pd.DataFrame({"Pizza": [pizza_type.capitalize()], "Tamaño": [pizza_size.capitalize()], "Precio": [precio]})
+            detalles_df = pd.concat([detalles_df, nueva_fila], ignore_index=True)        
         else:
             print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
             continue  # Utiliza continue en lugar de break para continuar con la siguiente iteración
