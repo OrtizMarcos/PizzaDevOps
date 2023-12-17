@@ -1,13 +1,15 @@
 import random
 import pandas as pd
-# Diccionario con el menú de pizzas y sus precios base
-menu_pizzas = {
-    "margarita": {"mediano": 35000.0, "grande": 40000.0},
-    "pepperoni": {"mediano": 37000.0, "grande": 42000.0},
-    "vegetariana": {"mediano": 32000.0, "grande": 36000.0}
-}
 
-costo_delivery = 12000.0  # definir aquí costo estándar de delivery
+# Crear el menú de pizzas como DataFrame
+menu_pizzas_data = {
+    "Pizza": ["margarita", "pepperoni", "vegetariana"],
+    "Mediano": [35000.0, 37000.0, 32000.0],
+    "Grande": [40000.0, 42000.0, 36000.0]
+}
+menu_pizzas_df = pd.DataFrame(menu_pizzas_data)
+
+costo_delivery = 12000.0  # Definir aquí el costo estándar de delivery
 
 def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
     """
@@ -25,11 +27,11 @@ def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
     pizza_size = pizza_size.lower()
 
     # Validar pizza y tamaño
-    if pizza_type not in menu_pizzas or pizza_size not in menu_pizzas[pizza_type]:
+    if pizza_type not in menu_pizzas_df["Pizza"].values or pizza_size.lower() not in ["mediano", "grande"]:
         return None
 
     # Obtener el precio base de la pizza
-    precio_pizza = menu_pizzas[pizza_type][pizza_size]
+    precio_pizza = menu_pizzas_df.loc[menu_pizzas_df["Pizza"] == pizza_type, pizza_size.capitalize()].values[0]
 
     return precio_pizza
 
@@ -64,17 +66,16 @@ def obtener_informacion_cliente_delivery():
     return direccion
 
 def mostrar_detalles_pizza(pizza_type, pizza_size):
-    precio = menu_pizzas[pizza_type][pizza_size]
+    precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
     print(f"Pizza: {pizza_type.capitalize()} - Tamaño: {pizza_size.capitalize()} - Precio: Gs. {precio:.2f}")
 
 def main():
+    global pedidos_df  # Referenciar la variable global
+
     print("Bienvenido a la pizzería, desea realizar un pedido de pickup (recoger del local) o delivery (entrega a domicilio)?")
 
     pedidos = []  # Lista para almacenar los pedidos
-    #DataFrame para almacenar los detalles de las pizzas
-    columnas = ["Pizza", "Tamaño", "Precio"]
-    columnas = ["Pizza", "Tamaño", "Precio"]
-    detalles_df = pd.DataFrame(columns=columnas)
+
     # Definir método de entrega
     tipo_pedido = input("¿Quiere Pickup o Delivery? ").lower()
     mensaje_pedido = ""
@@ -93,15 +94,10 @@ def main():
 
         # Validar pizza y tamaño antes de agregar al pedido
         if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
-            precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
             pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
-
-            # Agregar detalles al DataFrame
-            nueva_fila = pd.DataFrame({"Pizza": [pizza_type.capitalize()], "Tamaño": [pizza_size.capitalize()], "Precio": [precio]})
-            detalles_df = pd.concat([detalles_df, nueva_fila], ignore_index=True)        
         else:
             print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
-            continue  # Utiliza continue en lugar de break para continuar con la siguiente iteración
+
         otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
         if otro_pedido != 'si':
             break
@@ -120,12 +116,31 @@ def main():
         mensaje_pedido = f"Su pedido ha sido registrado con éxito, su número de pedido es {numero_pedido}, puede pasar a retirarlo al local en 20 minutos."
 
     # Imprimir resumen del pedido en caso de que se haya realizado alguno:
-    if len(pedidos) > 0:
+    if len(pedidos) == 0:
+        print("No se realizaron pedidos.")
+    else:
         print("\n|--------------------------------|\n")
-        print("n\Resumen del pedido:")
-        print(detalles_df)
-        print(f"\nTotal a pagar Gs. {total:.2f}")
+        print(mensaje_pedido)
+        print("Resumen del pedido:")
+        for pizza_type, pizza_size in pedidos:
+            mostrar_detalles_pizza(pizza_type, pizza_size)
+        print(f"Total a pagar: Gs. {total:.2f}")
         print("\n|--------------------------------|")
+    
+    # Crear un DataFrame con el nuevo registro
+    nuevo_registro = {
+        "tipo_pedido": [delivery],
+        "direccion_entrega": [direccion if delivery == "delivery" else None],
+        "pedido": [pedidos],
+        "costo_delivery": [costo_delivery if delivery == "delivery" else None],
+        "costo_total": [total]
+    }
+    nuevo_df = pd.DataFrame(nuevo_registro)
+
+    # Concatenar el DataFrame inicial con el nuevo registro
+    pedidos_df = pd.concat([pedidos_df, nuevo_df], ignore_index=True)
 
 if __name__ == "__main__":
+    pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery"])
     main()
+    print(pedidos_df)  # Mostrar el DataFrame después de ejecutar main()
