@@ -9,7 +9,7 @@ menu_pizzas_data = {
 }
 menu_pizzas_df = pd.DataFrame(menu_pizzas_data)
 
-costo_delivery = 12000.0  # Definir aquí el costo estándar de delivery
+costo_delivery = 12000.0  # definir aquí costo estándar de delivery
 
 def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
     """
@@ -27,11 +27,11 @@ def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
     pizza_size = pizza_size.lower()
 
     # Validar pizza y tamaño
-    if pizza_type not in menu_pizzas_df["Pizza"].values or pizza_size.lower() not in ["mediano", "grande"]:
+    if pizza_type not in menu_pizzas or pizza_size not in menu_pizzas[pizza_type]:
         return None
 
     # Obtener el precio base de la pizza
-    precio_pizza = menu_pizzas_df.loc[menu_pizzas_df["Pizza"] == pizza_type, pizza_size.capitalize()].values[0]
+    precio_pizza = menu_pizzas[pizza_type][pizza_size]
 
     return precio_pizza
 
@@ -66,8 +66,14 @@ def obtener_informacion_cliente_delivery():
     return direccion
 
 def mostrar_detalles_pizza(pizza_type, pizza_size):
-    precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
+    precio = menu_pizzas[pizza_type][pizza_size]
     print(f"Pizza: {pizza_type.capitalize()} - Tamaño: {pizza_size.capitalize()} - Precio: Gs. {precio:.2f}")
+
+def crear_dataframe_pedido():
+    df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total"])
+    return df
+
+pedidos_df = crear_dataframe_pedido()
 
 def main():
     global pedidos_df  # Referenciar la variable global
