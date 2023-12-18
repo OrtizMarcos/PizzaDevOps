@@ -13,26 +13,6 @@ menu_pizzas_df = pd.DataFrame(menu_pizzas)
 
 costo_delivery = 12000.0  # definir aquí costo estándar de delivery
 
-def calcular_precio_total_con_delivery(pedido, direccion):
-    total_general = 0
-    for pizza_type, pizza_size in pedido:
-        total_pizza = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
-        if total_pizza is None:
-            return None
-
-        total_general += total_pizza
-
-    total_general += costo_delivery
-
-    numero_pedido = random.randint(100, 500)
-    mensaje_pedido = f"Su pedido ha sido registrado con éxito, su número de pedido es {numero_pedido}, será entregado en un periodo de 40 a 60 minutos en la dirección ingresada."
-
-    # Solicitar comentario y calificación al cliente
-    comentario = input("Por favor, déjenos un comentario sobre su experiencia: ")
-    calificacion = input("Por favor, califique su experiencia (del 1 al 5): ")
-
-    return total_general, mensaje_pedido, comentario, calificacion
-
 def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
     pizza_type = pizza_type.lower()
     pizza_size = pizza_size.lower()
@@ -158,31 +138,6 @@ def main():
         print(f"Total a pagar: Gs. {total:.2f}")
         print("\n|--------------------------------|")
     
-    if tipo_pedido == "delivery":
-    resultado = calcular_precio_total_con_delivery(pedidos, direccion)
-    if resultado is not None:
-        total, mensaje_pedido, comentario, calificacion = resultado
-    else:
-        print("Error en el cálculo del precio total del pedido.")
-        return
-
-    # Imprimir resumen del pedido en caso de que se haya realizado alguno:
-    if len(pedidos) == 0:
-        print("No se realizaron pedidos.")
-    else:
-        print("\n|--------------------------------|\n")
-        print(mensaje_pedido)
-        print("Resumen del pedido:")
-        for pizza_type, pizza_size in pedidos:
-            mostrar_detalles_pizza(pizza_type, pizza_size)
-        print(f"Total a pagar: Gs. {total:.2f}")
-
-        # Mostrar comentario y calificación
-        print(f"Comentario del cliente: {comentario}")
-        print(f"Calificación del cliente: {calificacion}/5")
-        print("\n|--------------------------------|")
-
-    
     # Concatenar el DataFrame inicial con el nuevo registro
     nuevo_registro = {
         "tipo_pedido": [delivery],
@@ -202,6 +157,7 @@ def main():
         
 if __name__ == "__main__":
     main()
+    print(pedidos_df)  # Mostrar el DataFrame después de ejecutar main()
 
     # Guardar el DataFrame como CSV
     pedidos_df.to_csv('pedidos.csv', index=False)
