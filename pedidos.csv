@@ -7,3 +7,5 @@ delivery,aparipy 1111,"[('vegetariana', 'grande'), ('vegetariana', 'grande'), ('
 pickup,,"[('pepperoni', 'mediano')]",,37000.0,2023-12-17 22:50:49
 delivery,juano erd34,"[('margarita', 'grande')]",12000.0,52000.0,2023-12-17 22:51:49
 delivery,coñines 123,"[('pepperoni', 'grande')]",12000.0,54000.0,2023-12-17 22:52:06
+pickup,,"[('pepperoni', 'grande'), ('margarita', 'grande')]",,82000.0,2023-12-17 23:01:23
+delivery,Avenida siempreviva 747,"[('margarita', 'mediano'), ('pepperoni', 'grande')]",12000.0,89000.0,2023-12-17 23:02:31
