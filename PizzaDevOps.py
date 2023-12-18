@@ -2,38 +2,29 @@ import random
 import pandas as pd
 
 # Crear el menú de pizzas como DataFrame
-menu_pizzas_data = {
+menu_pizzas = {
     "Pizza": ["margarita", "pepperoni", "vegetariana"],
     "Mediano": [35000.0, 37000.0, 32000.0],
     "Grande": [40000.0, 42000.0, 36000.0]
 }
-menu_pizzas_df = pd.DataFrame(menu_pizzas_data)
+menu_pizzas_df = pd.DataFrame(menu_pizzas)
 
 costo_delivery = 12000.0  # definir aquí costo estándar de delivery
 
 def calcular_precio_total_sin_delivery(pizza_type, pizza_size):
-    """
-    Función que calcula el precio total de un pedido de pizza, incluyendo pizza, tamaño y toppings, excluyendo el costo de entrega.
-
-    Args:
-        pizza_type (str): El nombre de la pizza.
-        pizza_size (str): El tamaño de la pizza.
-
-    Returns:
-        float: Precio total del pedido sin costo de entrega.
-    """
-
     pizza_type = pizza_type.lower()
     pizza_size = pizza_size.lower()
 
     # Validar pizza y tamaño
-    if pizza_type not in menu_pizzas or pizza_size not in menu_pizzas[pizza_type]:
+    if pizza_type not in menu_pizzas_df['Pizza'].values or pizza_size.lower() not in ['mediano', 'grande']:
         return None
 
     # Obtener el precio base de la pizza
-    precio_pizza = menu_pizzas[pizza_type][pizza_size]
+    index_pizza = menu_pizzas_df['Pizza'].values.tolist().index(pizza_type)
+    precio_pizza = menu_pizzas_df[pizza_size.capitalize()].iloc[index_pizza]
 
     return precio_pizza
+
 
 def calcular_precio_total_con_delivery(pedido, direccion):
     """
@@ -66,14 +57,19 @@ def obtener_informacion_cliente_delivery():
     return direccion
 
 def mostrar_detalles_pizza(pizza_type, pizza_size):
-    precio = menu_pizzas[pizza_type][pizza_size]
-    print(f"Pizza: {pizza_type.capitalize()} - Tamaño: {pizza_size.capitalize()} - Precio: Gs. {precio:.2f}")
+    if pizza_type.lower() in menu_pizzas_df['Pizza'].values:
+        precio = calcular_precio_total_sin_delivery(pizza_type, pizza_size)
+        if precio is not None:
+            print(f"Pizza: {pizza_type.capitalize()} - Tamaño: {pizza_size.capitalize()} - Precio: Gs. {precio:.2f}")
+        else:
+            print("No se encontró el precio de la pizza. Por favor, verifique su selección.")
+    else:
+        print("Pizza no encontrada en el menú. Por favor, seleccione una pizza válida.")
 
-def crear_dataframe_pedido():
-    df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total"])
-    return df
 
-pedidos_df = crear_dataframe_pedido()
+# Verificar si el DataFrame ya existe antes de llamar a la función de creación
+if 'pedidos_df' not in globals():
+    pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total"])
 
 def main():
     global pedidos_df  # Referenciar la variable global
@@ -99,10 +95,11 @@ def main():
         pizza_size = input("Tamaño de pizza que desea (mediano, grande): ")
 
         # Validar pizza y tamaño antes de agregar al pedido
-        if pizza_type.lower() in menu_pizzas and pizza_size.lower() in ["mediano", "grande"]:
+        if pizza_type.lower() in menu_pizzas_df['Pizza'].values and pizza_size.lower() in ['mediano', 'grande']:
             pedidos.append((pizza_type, pizza_size))  # Agregar pizza al pedido sin toppings
         else:
             print("Pizza o tamaño no válidos. Por favor, seleccione una pizza y tamaño válidos.")
+
 
         otro_pedido = input("¿Desea agregar otro pedido? (si/no): ").lower()
         if otro_pedido != 'si':
@@ -133,7 +130,7 @@ def main():
         print(f"Total a pagar: Gs. {total:.2f}")
         print("\n|--------------------------------|")
     
-    # Crear un DataFrame con el nuevo registro
+    # Concatenar el DataFrame inicial con el nuevo registro
     nuevo_registro = {
         "tipo_pedido": [delivery],
         "direccion_entrega": [direccion if delivery == "delivery" else None],
@@ -143,10 +140,12 @@ def main():
     }
     nuevo_df = pd.DataFrame(nuevo_registro)
 
-    # Concatenar el DataFrame inicial con el nuevo registro
-    pedidos_df = pd.concat([pedidos_df, nuevo_df], ignore_index=True)
+    # Verificar si el DataFrame está vacío o no existe
+    if pedidos_df.empty:
+        pedidos_df = nuevo_df
+    else:
+        pedidos_df = pd.concat([pedidos_df, nuevo_df], ignore_index=True)
 
 if __name__ == "__main__":
-    pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery"])
     main()
     print(pedidos_df)  # Mostrar el DataFrame después de ejecutar main()
