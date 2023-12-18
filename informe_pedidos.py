@@ -40,12 +40,19 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
+
+# Obtener la cantidad de veces que se pide pizza mediana y grande
+cantidad_mediana = df[filtro_mediana].shape[0]
+cantidad_grande = df[filtro_grande].shape[0]
 # Generar histograma para cantidad de veces que se pide pizza mediana y grande
-plt.figure(figsize=(8, 6))
-plt.hist([cantidad_mediana, cantidad_grande], bins=3, color=['lightgreen', 'lightblue'], label=['Pizza Mediana', 'Pizza Grande'])
+plt.figure(figsize=(6, 8))
+# Crear una lista con los datos de cantidad de veces de pizza mediana y grande
+data = [cantidad_mediana, cantidad_grande]
+# Crear barras con la frecuencia en el eje y
+plt.bar(['Pizza Mediana', 'Pizza Grande'], data, color=['lightgreen', 'lightblue'])
 plt.title('Cantidad de Veces que se Pide Pizza Mediana y Grande')
-plt.xlabel('Cantidad de Veces')
+plt.xlabel('Tamaño de Pizza')
 plt.ylabel('Frecuencia')
-plt.legend()
-plt.grid(True)
+plt.grid(axis='y')
 plt.show()
+
