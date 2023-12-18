@@ -1,3 +1,3 @@
-tipo_pedido,direccion_entrega,pedido,costo_delivery,costo_total
-delivery,aparipy 1164,"[('vegetariana', 'grande'), ('margarita', 'grande')]",12000.0,88000.0
-pickup,,"[('margarita', 'mediano')]",,35000.0
+tipo_pedido,direccion_entrega,pedido,costo_delivery,costo_total,hora_pedido
+delivery,aparipy 1164,"[('vegetariana', 'grande'), ('vegetariana', 'grande')]",12000.0,84000.0,21:59:44
+pickup,,"[('vegetariana', 'mediano')]",,32000.0,2023-12-17 22:02:24

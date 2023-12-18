@@ -1,6 +1,7 @@
 import random
 import pandas as pd
 import os
+from datetime import datetime
 
 # Crear el menú de pizzas como DataFrame
 menu_pizzas = {
@@ -70,7 +71,7 @@ def mostrar_detalles_pizza(pizza_type, pizza_size):
 # Verificar si el archivo 'pedidos.csv' existe
 if not os.path.exists('pedidos.csv'):
     # Si no existe, crear un DataFrame vacío y guardarlo como CSV
-    pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total"])
+    pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total", "hora_pedido"])
     pedidos_df.to_csv('pedidos.csv', index=False)
 else:
     # Si existe, cargar el DataFrame desde el archivo CSV
@@ -110,6 +111,8 @@ def main():
         if otro_pedido != 'si':
             break
 
+    hora_pedido = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obtener fecha y hora actuales en formato YYYY-MM-DD HH:MM:SS
+
     if tipo_pedido == "delivery":
         resultado = calcular_precio_total_con_delivery(pedidos, direccion)
         if resultado is not None:
@@ -141,7 +144,8 @@ def main():
         "direccion_entrega": [direccion if delivery == "delivery" else None],
         "pedido": [pedidos],
         "costo_delivery": [costo_delivery if delivery == "delivery" else None],
-        "costo_total": [total]
+        "costo_total": [total],
+        "hora_pedido": [hora_pedido]
     }
     nuevo_df = pd.DataFrame(nuevo_registro)
 
