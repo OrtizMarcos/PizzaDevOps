@@ -3,3 +3,7 @@ delivery,aparipy 1164,"[('vegetariana', 'grande'), ('vegetariana', 'grande')]",1
 pickup,,"[('vegetariana', 'mediano')]",,32000.0,2023-12-17 22:02:24
 delivery,asuncion,"[('pepperoni', 'grande'), ('margarita', 'mediano')]",12000.0,89000.0,2023-12-17 22:16:21
 pickup,,"[('vegetariana', 'grande')]",,36000.0,2023-12-17 22:17:19
+delivery,aparipy 1111,"[('vegetariana', 'grande'), ('vegetariana', 'grande'), ('vegetariana', 'grande')]",12000.0,120000.0,2023-12-17 22:50:35
+pickup,,"[('pepperoni', 'mediano')]",,37000.0,2023-12-17 22:50:49
+delivery,juano erd34,"[('margarita', 'grande')]",12000.0,52000.0,2023-12-17 22:51:49
+delivery,coñines 123,"[('pepperoni', 'grande')]",12000.0,54000.0,2023-12-17 22:52:06
