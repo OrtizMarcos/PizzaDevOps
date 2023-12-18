@@ -1,5 +1,6 @@
 import random
 import pandas as pd
+import os
 
 # Crear el menú de pizzas como DataFrame
 menu_pizzas = {
@@ -66,10 +67,14 @@ def mostrar_detalles_pizza(pizza_type, pizza_size):
     else:
         print("Pizza no encontrada en el menú. Por favor, seleccione una pizza válida.")
 
-
-# Verificar si el DataFrame ya existe antes de llamar a la función de creación
-if 'pedidos_df' not in globals():
+# Verificar si el archivo 'pedidos.csv' existe
+if not os.path.exists('pedidos.csv'):
+    # Si no existe, crear un DataFrame vacío y guardarlo como CSV
     pedidos_df = pd.DataFrame(columns=["tipo_pedido", "direccion_entrega", "pedido", "costo_delivery", "costo_total"])
+    pedidos_df.to_csv('pedidos.csv', index=False)
+else:
+    # Si existe, cargar el DataFrame desde el archivo CSV
+    pedidos_df = pd.read_csv('pedidos.csv')
 
 def main():
     global pedidos_df  # Referenciar la variable global
@@ -145,7 +150,10 @@ def main():
         pedidos_df = nuevo_df
     else:
         pedidos_df = pd.concat([pedidos_df, nuevo_df], ignore_index=True)
-
+        
 if __name__ == "__main__":
     main()
     print(pedidos_df)  # Mostrar el DataFrame después de ejecutar main()
+
+    # Guardar el DataFrame como CSV
+    pedidos_df.to_csv('pedidos.csv', index=False)
